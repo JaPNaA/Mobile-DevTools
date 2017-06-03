@@ -115,9 +115,9 @@ function install(e) {
 }
 
 function consoleTools(e) {
-    var x = e.toLowerCase().split(' '),
+    var x = e.split(' '),
         b = vars.activeFrame;
-    switch (x[0]) {
+    switch (x[0].toLowerCase()) {
         case "version":
             aConsole('Version 0.2 Beta');
             break;
