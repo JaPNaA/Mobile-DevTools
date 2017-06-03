@@ -1,14 +1,15 @@
 var vars = {
     refreshed: false,
-    frame: true,
+    frame: false,
     consoleHistory: [],
     consoleHistoryIx: -1,
-    activeFrame:undefined
+    activeFrame: undefined,
+    theme: true
 };
 (function() {
     document.body.innerHTML =
-        "<iframe class=main name=main></iframe> <div id=console><div id=ClogC><div id=cLog></div></div><div id=cIn><textarea></textarea> </div></div>";
-        vars.activeFrame=window.frames[$('iframe.main').name];
+        "<iframe class=main name=main></iframe> <div id=console><div id=ClogC style='background-color:white'><div id=cLog></div></div><div id=cIn><textarea></textarea> </div></div>";
+    vars.activeFrame = window.frames[$('iframe.main').name];
     onresize = function() {
         var a = $('iframe.main'),
             b = $('#ClogC');
@@ -119,21 +120,21 @@ function consoleTools(e) {
         b = vars.activeFrame;
     switch (x[0].toLowerCase()) {
         case "version":
-            aConsole('Version 0.2 Beta');
+            aConsole('Version 0.3!# Beta');
             break;
         case "about":
-            aConsole('(C) Copyright 2016, created by JaPNaA');
+            aConsole('(C) Copyright 2017, created by JaPNaA');
             break;
         case "help":
             aConsole("Learn JavaScript.");
             aConsole("Unless you want to know about these commands.");
             aConsole(
-                "~#version ~#about ~#help ~#clear ~#install ~#refresh ~#frame"
+                "~#about ~#clear ~#debug ~#frame ~#help ~#insert ~#install ~#refresh ~#theme ~#version"
             );
             break;
         case "install":
             if (x[1]) {
-                var b = vars.activeFrame
+                var b = vars.activeFrame;
                 aConsole('Installing from: ' + x[1]);
                 b.eval(install(x[1]));
             } else {
@@ -170,19 +171,60 @@ function consoleTools(e) {
             aConsole('Debug closed. Nothing happend? Make sure DevTools is on');
             break;
         case "frame":
-            vars.frame = !vars.frame;
-            window.onresize();
-            if (vars.frame) {
-                aConsole('Frame on');
+            if (!(x[1] == "on" || x[1] == "true" || x[1] == "off" || x[1] ==
+                    "false")) {
+                vars.frame = !vars.frame;
+                if (vars.frame) {
+                    aConsole('Frame on');
+                } else {
+                    aConsole('Frame off');
+                }
             } else {
-                aConsole('Frame off');
+                if (x[1] == "on" || x[1] == "true")
+                    vars.frame = true;
+                if (x[1] == "off" || x[1] == "false")
+                    vars.frame = false;
             }
+            window.onresize();
             break;
         case "pop":
-            consoleTools('frame');
-            vars.activeFrame=open('','','width='+x[1]||100+',height='+x[2]||100);
+            consoleTools('frame off');
+            vars.activeFrame = open('', '', 'width=' + x[1] || 100 + ',height=' +
+                x[2] || 100);
             aConsole('Poped.');
-            aConsole('Btw if you didn\'t know, you can specify width and height in syntax.');
+            aConsole(
+                'Btw if you didn\'t know, you can specify width and height in syntax.'
+            );
+            break;
+        case "insert":
+            $('#cLog').appendChild($('<div>' + (function() {
+                var f = "";
+                x.shift();
+                x.forEach(function(ob) {
+                    f += ob + " ";
+                });
+                return f.substring(0, f.length - 1);
+            }()) + '</div>'))
+            break;
+        case "theme":
+            if (x[1]) {
+                if (x[1] == "0" || x[1] == "dark" || x[1] == "false") {
+                    vars.theme = 0;
+                }
+                if (x[1] == "1" || x[1] == "light" || x[1] == "true") {
+                    vars.theme = 1;
+                }
+            } else {
+                vars.theme = !vars.theme;
+            }
+            if (vars.theme) {
+                $('#console').style.filter = "none";
+                $('#ClogC').style.background = "white";
+                $('#cLog').style.fontWeight = "100";
+            } else {
+                $('#console').style.filter = "invert()";
+                $('#cLog').style.fontWeight = "800";
+            }
             break;
         default:
             aConsole('Unknown Command', 3);
@@ -196,7 +238,16 @@ function consoleTools(e) {
                 aConsole(e, 0);
             },
             clear: function() {
-                aConsole(0, 4)
+                aConsole(0, 4);
+            },
+            warn: function(e){
+                aConsole(e,3);
+            },
+            error:function(e){
+                aConsole(e,2);
+            },
+            info:function(e){
+                aConsole(e,0);
             }
         }
     b.console = a;
@@ -233,7 +284,8 @@ function consoleTools(e) {
         }
         if (e.keyCode == 38 || e.keyCode == 40) {
             if (e.keyCode == 38) {
-                if (vars.consoleHistoryIx < vars.consoleHistory.length-1)
+                if (vars.consoleHistoryIx < vars.consoleHistory.length -
+                    1)
                     vars.consoleHistoryIx += 1;
             }
             if (e.keyCode == 40) {
