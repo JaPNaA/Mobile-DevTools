@@ -1,0 +1,99 @@
+@keyframes borderRainbow{
+    0%{
+        border-color: hsl(0,100%,50%);
+    }
+    12.5%{
+        border-color: hsl(45,100%,50%);
+    }
+    25%{
+        border-color: hsl(90,100%,50%);
+    }
+    37.5%{
+        border-color: hsl(135,100%,50%);
+    }
+    50%{
+        border-color: hsl(180,100%,50%);
+    }
+    62.5%{
+        border-color: hsl(225,100%,50%);
+    }
+    75%{
+        border-color: hsl(270,100%,50%);
+    }
+    87.5%{
+        border-color: hsl(315,100%,50%);
+    }
+    100%{
+        border-color: hsl(360,100%,50%);
+    }
+}
+
+iframe.main{
+    border: 0;
+    display: block;
+}
+body{
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+#console{
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 300px;
+    display: block;
+    border-left: solid 2px #49b7fc;
+    animation: borderRainbow 8s infinite forwards;
+}
+#cIn{
+    position: absolute;
+    bottom:0;
+    width: 100%;
+}
+#cIn>textarea{
+    resize: none;
+    width: 100%;
+    bottom:0;
+    height: 75px;
+    position: absolute;
+    outline:none;
+    border:0;
+    border-top:1px #49b7fc solid;
+    padding: 4px;
+    margin: 0;
+}
+#ClogC{
+    overflow-y: scroll;
+}
+#cLog>._error{
+    background-color: rgba(255,0,0, 0.1);
+    color:#ad0000;
+}
+#cLog>._command::before{
+    content: "> ";
+    color:darkgrey;
+}
+#cLog>._return::before{
+    content: "< ";
+    color:grey;
+}
+#cLog>div{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 4px;
+    font-family: Consolas;
+    font-size:12px;
+    white-space: pre-wrap;
+}
+#cLog .__number{
+    color:#0000bb;
+}
+#cLog>._warn{
+    background-color: rgba(255, 230, 0, 0.1);
+    color:#9a9400;
+}
+#cLog .__bool{
+    color:#aa00aa;
+}
